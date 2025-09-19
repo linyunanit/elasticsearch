@@ -52,7 +52,7 @@ module org.elasticsearch.security {
     requires unboundid.ldapsdk;
     requires org.elasticsearch.logging;
 
-    exports org.elasticsearch.xpack.security.action to org.elasticsearch.server;
+    exports org.elasticsearch.xpack.security.action to org.elasticsearch.server, org.elasticsearch.internal.security;
     exports org.elasticsearch.xpack.security.action.apikey to org.elasticsearch.server;
     exports org.elasticsearch.xpack.security.action.enrollment to org.elasticsearch.server;
     exports org.elasticsearch.xpack.security.action.oidc to org.elasticsearch.server;
