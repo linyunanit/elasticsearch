@@ -110,7 +110,6 @@ public class TransportForceMergeAction extends TransportBroadcastByNodeAction<
             // Checking whether a force-merge is a no-op requires IO, so we fork to the generic threadpool.
             threadPool.generic().execute(ActionRunnable.supply(l, () -> {
                 boolean forceMergeIsNoOp = indexShard.withEngineException(engine -> {
-                    engine.flush();
                     return engine.forceMergeIsNoOp(request.maxNumSegments(), request.onlyExpungeDeletes());
                 });
                 return Tuple.tuple(forceMergeIsNoOp, indexShard);

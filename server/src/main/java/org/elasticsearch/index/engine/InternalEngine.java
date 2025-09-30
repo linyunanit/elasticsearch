@@ -2550,6 +2550,9 @@ public class InternalEngine extends Engine {
         if (onlyExpungeDeletes && maxNumSegments >= 0) {
             throw new IllegalArgumentException("only_expunge_deletes and max_num_segments are mutually exclusive");
         }
+        if (hasUncommittedChanges()) {
+            return false;
+        }
         try (var reader = DirectoryReader.open(indexWriter)) {
             final var segmentCommitInfos = SegmentInfos.readCommit(reader.directory(), reader.getIndexCommit().getSegmentsFileName());
             final var segmentsToMerge = new HashMap<SegmentCommitInfo, Boolean>();
