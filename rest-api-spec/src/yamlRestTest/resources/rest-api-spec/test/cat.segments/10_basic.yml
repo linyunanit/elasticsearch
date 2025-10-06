@@ -215,6 +215,11 @@ Wildcard Expansion Settings:
   - do:
       indices.create:
         index: basic-index
+        body:
+          settings:
+            number_of_shards: 1
+            number_of_replicas: 0
+
   - do:
       index:
         index: basic-index
@@ -227,7 +232,10 @@ Wildcard Expansion Settings:
         index: hidden-index
         body:
           settings:
+            number_of_shards: 1
+            number_of_replicas: 0
             index.hidden: true
+
   - do:
       index:
         index: hidden-index
@@ -238,6 +246,11 @@ Wildcard Expansion Settings:
   - do:
       indices.create:
         index: closed-index
+        body:
+          settings:
+            number_of_shards: 1
+            number_of_replicas: 0
+
   - do:
       index:
         index: closed-index
