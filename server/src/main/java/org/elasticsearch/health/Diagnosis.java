@@ -126,6 +126,11 @@ public record Diagnosis(Definition definition, @Nullable List<Resource> affected
         public Collection<DiscoveryNode> getNodes() {
             return nodes;
         }
+
+        @Override
+        public String toString() {
+            return "Resource{" + "type=" + type + ", values=" + values + ", nodes=" + nodes + '}';
+        }
     }
 
     /**
