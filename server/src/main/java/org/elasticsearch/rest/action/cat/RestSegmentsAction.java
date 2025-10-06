@@ -63,17 +63,22 @@ public class RestSegmentsAction extends AbstractCatAction {
         final ClusterStateRequest clusterStateRequest = new ClusterStateRequest(getMasterNodeTimeout(request));
         RestUtils.consumeDeprecatedLocalParameter(request);
 
-        IndicesOptions indicesOptions = IndicesOptions.fromRequest(request, IndicesOptions.lenientExpandOpen());
+        boolean allowClosed = request.paramAsBoolean("allow_closed", false);
+        IndicesOptions defaultOptions = allowClosed
+            ? IndicesOptions.strictExpandHidden()
+            : IndicesOptions.strictExpandOpenAndForbidClosed();
+        IndicesOptions indicesOptions = IndicesOptions.fromRequest(request, defaultOptions);
+
         clusterStateRequest.clear().nodes(true).routingTable(true).indices(indices).indicesOptions(indicesOptions);
 
         final RestCancellableNodeClient cancelClient = new RestCancellableNodeClient(client, request.getHttpChannel());
 
-        return channel -> cancelClient.admin().cluster().state(clusterStateRequest, new RestActionListener<ClusterStateResponse>(channel) {
+        return channel -> cancelClient.admin().cluster().state(clusterStateRequest, new RestActionListener<>(channel) {
             @Override
             public void processResponse(final ClusterStateResponse clusterStateResponse) {
                 final IndicesSegmentsRequest indicesSegmentsRequest = new IndicesSegmentsRequest();
                 indicesSegmentsRequest.indices(indices).indicesOptions(indicesOptions);
-                cancelClient.admin().indices().segments(indicesSegmentsRequest, new RestResponseListener<IndicesSegmentResponse>(channel) {
+                cancelClient.admin().indices().segments(indicesSegmentsRequest, new RestResponseListener<>(channel) {
                     @Override
                     public RestResponse buildResponse(final IndicesSegmentResponse indicesSegmentResponse) throws Exception {
                         if (request.getHttpChannel().isOpen() == false) {
