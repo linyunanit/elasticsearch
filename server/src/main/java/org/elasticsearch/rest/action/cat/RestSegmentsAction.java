@@ -34,12 +34,15 @@ import org.elasticsearch.tasks.TaskCancelledException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.elasticsearch.rest.RestRequest.Method.GET;
 import static org.elasticsearch.rest.RestUtils.getMasterNodeTimeout;
 
 @ServerlessScope(Scope.INTERNAL)
 public class RestSegmentsAction extends AbstractCatAction {
+
+    private static final Set<String> CAPABILITIES = Set.of("allow_closed");
 
     @Override
     public List<Route> routes() {
@@ -164,5 +167,10 @@ public class RestSegmentsAction extends AbstractCatAction {
         }
 
         return table;
+    }
+
+    @Override
+    public Set<String> supportedCapabilities() {
+        return CAPABILITIES;
     }
 }

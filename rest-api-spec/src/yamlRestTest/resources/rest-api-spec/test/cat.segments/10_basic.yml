@@ -212,6 +212,14 @@ tsdb:
 
 ---
 Wildcard Expansion Settings:
+  - requires:
+      capabilities:
+        - method: GET
+          path: /_cat/segments
+          capabilities: [ allow_closed ]
+      test_runner_features: [ capabilities ]
+      reason: Capability required to run test
+
   - do:
       indices.create:
         index: basic-index
