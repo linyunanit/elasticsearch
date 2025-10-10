@@ -48,7 +48,7 @@ public class RestGetHealthAction extends BaseRestHandler {
     protected RestChannelConsumer prepareRequest(RestRequest request, NodeClient client) throws IOException {
         String indicatorName = request.param("indicator");
         boolean verbose = request.paramAsBoolean(VERBOSE_PARAM, true);
-        int size = request.paramAsInt(SIZE_PARAM, 1000);
+        int size = request.paramAsInt(SIZE_PARAM, 100);
         GetHealthAction.Request getHealthRequest = new GetHealthAction.Request(indicatorName, verbose, size);
         return channel -> new RestCancellableNodeClient(client, request.getHttpChannel()).execute(
             GetHealthAction.INSTANCE,
